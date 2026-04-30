@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -12,6 +13,10 @@ export default function AuthPage() {
 
   const initialMode = searchParams.get("mode") === "signup" ? "signup" : "login";
   const [mode, setMode] = useState<"login" | "signup">(initialMode);
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const isLogin = mode === "login";
 
@@ -26,7 +31,67 @@ export default function AuthPage() {
   };
 
   const handleGoogle = async () => {
-    await signIn("google", { callbackUrl: "/dashboard" });
+    setLoading(true);
+    await signIn("google", { callbackUrl: "/api/auth/redirect" });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      if (mode === "login") {
+        const res = await signIn("credentials", {
+          redirect: false,
+          email,
+          password,
+        });
+
+        if (res?.error) {
+          toast.error("Invalid email or password");
+          setLoading(false);
+          return;
+        }
+
+        toast.success("Login successful!");
+        router.push("/dashboard");
+        router.refresh();
+      } else {
+        const createRes = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        const data = await createRes.json();
+
+        if (!createRes.ok) {
+          toast.error(data.error || "Failed to create account");
+          setLoading(false);
+          return;
+        }
+
+        // Login immediately after successful signup
+        const signInRes = await signIn("credentials", {
+          redirect: false,
+          email,
+          password,
+        });
+
+        if (signInRes?.error) {
+          toast.error("Account created, but couldn't log in automatically.");
+          setLoading(false);
+          return;
+        }
+
+        toast.success("Account created successfully!");
+        router.push("/onboarding");
+        router.refresh();
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,18 +138,16 @@ export default function AuthPage() {
                 <button
                   type="button"
                   onClick={() => switchMode("login")}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                    isLogin ? "bg-white text-slate-950" : "text-white/70"
-                  }`}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${isLogin ? "bg-white text-slate-950" : "text-white/70"
+                    }`}
                 >
                   Login
                 </button>
                 <button
                   type="button"
                   onClick={() => switchMode("signup")}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                    !isLogin ? "bg-white text-slate-950" : "text-white/70"
-                  }`}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${!isLogin ? "bg-white text-slate-950" : "text-white/70"
+                    }`}
                 >
                   Sign up
                 </button>
@@ -110,32 +173,51 @@ export default function AuthPage() {
               <div className="h-px flex-1 bg-white/10" />
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <input
                   type="text"
                   placeholder="Full name"
-                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  disabled={loading}
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50 disabled:opacity-50"
                 />
               )}
 
               <input
                 type="email"
                 placeholder="Email address"
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50 disabled:opacity-50"
               />
 
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50 disabled:opacity-50"
               />
 
               <button
                 type="submit"
-                className="w-full rounded-2xl bg-white px-4 py-3.5 text-sm font-semibold text-slate-950 transition hover:scale-[1.01]"
+                disabled={loading}
+                className="w-full rounded-2xl bg-white px-4 py-3.5 text-sm font-semibold text-slate-950 transition hover:scale-[1.01] disabled:opacity-75 disabled:hover:scale-100 flex items-center justify-center gap-2"
               >
-                {isLogin ? "Sign in" : "Create account"}
+                {loading ? (
+                  <>
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-950" />
+                    {isLogin ? "Signing in..." : "Creating account..."}
+                  </>
+                ) : (
+                  isLogin ? "Sign in" : "Create account"
+                )}
               </button>
             </form>
 

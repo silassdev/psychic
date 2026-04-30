@@ -40,6 +40,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name,
           email: user.email,
           role: user.role,
+          image: null,
         };
       },
     }),
@@ -49,15 +50,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.role = (user as any).role;
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.role = (user as any).role;
+        token.id = (user as any).id;
+      }
+      if (trigger === "update" && session?.role) {
+        token.role = session.role;
+      }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).role = (token as any).role;
+        (session.user as any).id = (token as any).id;
       }
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Allow relative URLs and same-origin URLs through
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (url.startsWith(baseUrl)) return url;
+      return baseUrl;
     },
   },
   secret: process.env.AUTH_SECRET,
