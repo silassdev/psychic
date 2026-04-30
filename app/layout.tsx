@@ -69,12 +69,14 @@ export default async function RootLayout({
                 </div>
               </Link>
 
-              <nav className="hidden items-center gap-6 text-sm text-white/65 md:flex">
-                <a href="#features" className="transition hover:text-white">Features</a>
-                <a href="#workflow" className="transition hover:text-white">Workflow</a>
-                <a href="#metrics" className="transition hover:text-white">Impact</a>
-                <a href="#get-started" className="transition hover:text-white">Get started</a>
-              </nav>
+              {!isAuthed && (
+                <nav className="hidden items-center gap-6 text-sm text-white/65 md:flex">
+                  <a href="#features" className="transition hover:text-white">Features</a>
+                  <a href="#workflow" className="transition hover:text-white">Workflow</a>
+                  <a href="#metrics" className="transition hover:text-white">Impact</a>
+                  <a href="#get-started" className="transition hover:text-white">Get started</a>
+                </nav>
+              )}
 
                 <div className="flex items-center gap-3">
                   {isAuthed ? (
@@ -99,7 +101,7 @@ export default async function RootLayout({
 
           {children}
 
-          <Footer />
+          {!isAuthed && <Footer />}
           <Toaster position="top-center" toastOptions={{ style: { background: "#1e293b", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" } }} />
         </Providers>
       </body>
