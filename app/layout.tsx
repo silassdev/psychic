@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/lib/auth";
-
+import Footer from "@/app/footer"
 import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -95,6 +95,9 @@ export default async function RootLayout({
         </header>
 
         {children}
+
+        <Footer />
+
       </body>
     </html>
   );

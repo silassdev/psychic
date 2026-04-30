@@ -12,7 +12,7 @@ async function seed() {
     process.exit();
   }
 
-  const hashed = await bcrypt.hash("password123", 10);
+  const hashed = await bcrypt.hash("apela2024", 10);
 
   await User.create({
     name: "Admin",
