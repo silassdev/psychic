@@ -1,349 +1,316 @@
-"use client";
+import Link from "next/link";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { battleAction } from "@/lib/actions";
-import { FiGithub, FiZap, FiTrendingUp, FiUsers, FiAward } from "react-icons/fi";
-import { SiGithub } from "react-icons/si";
+const stats = [
+  { label: "Attendance accuracy", value: "99.9%" },
+  { label: "Payroll cycles saved", value: "8 hrs" },
+  { label: "Admin actions", value: "1 click" },
+  { label: "Teams supported", value: "∞" },
+];
 
-export default function Home() {
-  const [user1, setUser1] = useState("");
-  const [user2, setUser2] = useState("");
-  const [results, setResults] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+const features = [
+  {
+    title: "Smart attendance",
+    desc: "Clock-in, clock-out, late tracking, overtime, and exception handling in one clean flow.",
+  },
+  {
+    title: "Payroll engine",
+    desc: "Preview, approve, and generate payroll with deductions, bonuses, and net pay calculations.",
+  },
+  {
+    title: "Role-based access",
+    desc: "Admin, HR, manager, and employee views stay separated with strict permissions.",
+  },
+  {
+    title: "Audit-ready records",
+    desc: "Every sensitive action can be tracked, reviewed, and traced later with confidence.",
+  },
+  {
+    title: "Responsive dashboards",
+    desc: "Built for desktop and mobile so teams can manage work from anywhere.",
+  },
+  {
+    title: "Vercel-friendly MVP",
+    desc: "Designed to stay lean, fast, and reliable on free hosting without unnecessary complexity.",
+  },
+];
 
-  const handleBattle = async () => {
-    if (!user1 || !user2) return;
-    setLoading(true);
-    const data = await battleAction(user1, user2);
-    setResults(data);
-    setLoading(false);
-  };
+const steps = [
+  {
+    step: "01",
+    title: "Create employees",
+    desc: "Set staff profiles, departments, salary rules, and access roles.",
+  },
+  {
+    step: "02",
+    title: "Track time",
+    desc: "Capture attendance with clock-in and clock-out records.",
+  },
+  {
+    step: "03",
+    title: "Run payroll",
+    desc: "Preview totals, approve changes, and issue payslips instantly.",
+  },
+];
 
-  const features = [
-    { icon: FiZap, label: "Instant Comparison", value: "Real-time analysis" },
-    { icon: FiTrendingUp, label: "Smart Scoring", value: "Weighted metrics" },
-    { icon: FiUsers, label: "Global Leaderboard", value: "Track rankings" },
-    { icon: FiAward, label: "Achievement System", value: "Unlock badges" },
-  ];
+const highlights = [
+  "Clean Tailwind UI",
+  "MongoDB-backed data",
+  "Next.js App Router",
+  "Fast admin workflow",
+  "MVP-ready structure",
+  "Built for expansion",
+];
 
+export default function Page() {
   return (
-    <main className="relative overflow-hidden">
-      {/* Animated Background Gradients */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse"
-          style={{ animationDuration: '4s' }} />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-emerald-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"
-          style={{ animationDuration: '6s', animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDuration: '5s', animationDelay: '2s' }} />
+    <main className="min-h-screen bg-[#070B14] text-white">
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.28),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(168,85,247,0.24),_transparent_26%),radial-gradient(circle_at_bottom,_rgba(14,165,233,0.18),_transparent_28%)]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+        <section className="relative mx-auto max-w-7xl px-6 pb-20 pt-8 sm:px-8 lg:px-10 lg:pb-28 lg:pt-12">
+          <header className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 backdrop-blur">
+                <span className="text-lg font-black tracking-tight">P</span>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-white/60">Payroll + Attendance</p>
+                <h1 className="text-base font-semibold tracking-wide text-white">PayPilot</h1>
+              </div>
+            </div>
+
+            <nav className="hidden items-center gap-6 text-sm text-white/65 md:flex">
+              <a href="#features" className="transition hover:text-white">Features</a>
+              <a href="#workflow" className="transition hover:text-white">Workflow</a>
+              <a href="#metrics" className="transition hover:text-white">Impact</a>
+            </nav>
+
+            <Link
+              href="#get-started"
+              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-white/10 transition hover:scale-[1.02]"
+            >
+              Launch MVP
+            </Link>
+          </header>
+
+          <div className="mt-16 grid items-center gap-12 lg:mt-24 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/75 backdrop-blur">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                Built for modern payroll teams
+              </div>
+
+              <h2 className="mt-6 max-w-3xl text-5xl font-black leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
+                Run attendance and payroll without the usual mess.
+              </h2>
+
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">
+                A sharp, modern HR operations app for managing staff records, attendance, leave, and payroll from a single dashboard. Fast on Vercel. Clean in MongoDB. Built to scale later.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="#get-started"
+                  className="rounded-full bg-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-400"
+                >
+                  Start building
+                </Link>
+                <Link
+                  href="#features"
+                  className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                >
+                  Explore features
+                </Link>
+              </div>
+
+              <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {stats.map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl"
+                  >
+                    <p className="text-2xl font-black tracking-tight text-white">{item.value}</p>
+                    <p className="mt-2 text-sm text-white/55">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-blue-500/20 via-cyan-400/10 to-purple-500/20 blur-2xl" />
+              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/8 shadow-2xl shadow-black/40 backdrop-blur-xl">
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                  <div>
+                    <p className="text-sm text-white/55">Today</p>
+                    <h3 className="text-lg font-semibold text-white">Operations overview</h3>
+                  </div>
+                  <div className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+                    Live status
+                  </div>
+                </div>
+
+                <div className="grid gap-4 p-5 sm:grid-cols-2">
+                  <div className="rounded-3xl bg-[#0c1220] p-5 ring-1 ring-white/8">
+                    <p className="text-sm text-white/50">Present staff</p>
+                    <p className="mt-2 text-4xl font-black tracking-tight">128</p>
+                    <div className="mt-4 h-2 rounded-full bg-white/10">
+                      <div className="h-2 w-[84%] rounded-full bg-gradient-to-r from-blue-400 to-cyan-300" />
+                    </div>
+                    <p className="mt-3 text-sm text-white/55">84% check-in completion</p>
+                  </div>
+
+                  <div className="rounded-3xl bg-[#0c1220] p-5 ring-1 ring-white/8">
+                    <p className="text-sm text-white/50">Payroll status</p>
+                    <p className="mt-2 text-4xl font-black tracking-tight">Ready</p>
+                    <p className="mt-4 text-sm text-white/55">Preview approved, payslips queued, deductions synced.</p>
+                  </div>
+
+                  <div className="rounded-3xl bg-[#0c1220] p-5 ring-1 ring-white/8 sm:col-span-2">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-white/50">This month</p>
+                        <p className="mt-1 text-2xl font-bold">Attendance accuracy improved</p>
+                      </div>
+                      <p className="text-2xl font-black text-emerald-300">+12%</p>
+                    </div>
+                    <div className="mt-5 grid grid-cols-7 gap-2">
+                      {[18, 34, 22, 48, 39, 60, 44].map((height, index) => (
+                        <div key={index} className="flex h-28 items-end rounded-2xl bg-white/5 p-2">
+                          <div
+                            className="w-full rounded-xl bg-gradient-to-t from-cyan-400 to-blue-500"
+                            style={{ height: `${height}%` }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Hero Section */}
-      <section className="container py-20 md:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-5xl mx-auto"
-        >
-          {/* Badge */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full glass border border-white/20 backdrop-blur-sm"
-          >
-            <SiGithub className="text-brand-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider">GitHub Developer Arena</span>
-          </motion.div>
-
-          {/* Main Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.7 }}
-            className="text-6xl md:text-8xl font-black mb-6 tracking-tight"
-          >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
-              GitBattle
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
-          >
-            Compare GitHub profiles head-to-head with intelligent scoring,
-            visual insights, and competitive rankings
-          </motion.p>
-        </motion.div>
-
-        {/* Battle Arena */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.7 }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="relative glass rounded-3xl p-8 md:p-12 border border-white/20 backdrop-blur-xl shadow-2xl">
-            {/* VS Badge */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-              className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-            >
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-500/50">
-                VS
-              </div>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              {/* Player 1 Input */}
-              <motion.div
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="group"
-              >
-                <label className="block text-sm font-bold uppercase tracking-wider mb-3 text-gray-700 dark:text-gray-300">
-                  <FiGithub className="inline mr-2" />
-                  Fighter 1
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={user1}
-                    onChange={(e) => setUser1(e.target.value)}
-                    placeholder="username"
-                    className="w-full px-6 py-4 rounded-xl bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 transition-all outline-none font-mono text-lg group-hover:border-blue-300 dark:group-hover:border-blue-600"
-                  />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                    <SiGithub size={20} />
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Player 2 Input */}
-              <motion.div
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.7 }}
-                className="group"
-              >
-                <label className="block text-sm font-bold uppercase tracking-wider mb-3 text-gray-700 dark:text-gray-300">
-                  <FiGithub className="inline mr-2" />
-                  Fighter 2
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={user2}
-                    onChange={(e) => setUser2(e.target.value)}
-                    placeholder="username"
-                    className="w-full px-6 py-4 rounded-xl bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-400 transition-all outline-none font-mono text-lg group-hover:border-purple-300 dark:group-hover:border-purple-600"
-                  />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                    <SiGithub size={20} />
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Battle Button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleBattle}
-              disabled={loading || !user1 || !user2}
-              className="w-full py-5 rounded-xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-black text-xl uppercase tracking-wider shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group"
-            >
-              <span className="relative z-10">
-                {loading ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full"
-                    />
-                    Analyzing Battle...
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center gap-2">
-                    <FiZap className="text-yellow-300" />
-                    Start Battle!
-                    <FiZap className="text-yellow-300" />
-                  </span>
-                )}
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </motion.button>
+      <section id="features" className="mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-10">
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">Features</p>
+            <h3 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">Everything the MVP needs, nothing bloated.</h3>
           </div>
-        </motion.div>
+          <div className="hidden max-w-md text-right text-sm text-white/55 md:block">
+            Built around the actual workflow of payroll teams, not a fantasy enterprise dashboard.
+          </div>
+        </div>
 
-        {/* Results Display */}
-        {results?.p1 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="max-w-4xl mx-auto mt-12"
-          >
-            <h2 className="text-3xl font-black text-center mb-8">Battle Results</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Winner Card - Player 1 */}
-              <motion.div
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className={`relative p-8 rounded-2xl backdrop-blur-xl border-2 transition-all ${results.p1.score > results.p2.score
-                    ? 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500 shadow-lg shadow-green-500/50'
-                    : 'glass border-white/20'
-                  }`}
-              >
-                {results.p1.score > results.p2.score && (
-                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                    <FiAward className="text-white text-xl" />
-                  </div>
-                )}
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-black text-2xl">
-                    {results.p1.name?.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <h3 className="font-black text-2xl">{results.p1.name}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Fighter 1</p>
-                  </div>
-                </div>
-                <div className="text-center py-6">
-                  <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                    {results.p1.score}
-                  </div>
-                  <div className="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mt-2">points</div>
-                </div>
-              </motion.div>
-
-              {/* Winner Card - Player 2 */}
-              <motion.div
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className={`relative p-8 rounded-2xl backdrop-blur-xl border-2 transition-all ${results.p2.score > results.p1.score
-                    ? 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500 shadow-lg shadow-green-500/50'
-                    : 'glass border-white/20'
-                  }`}
-              >
-                {results.p2.score > results.p1.score && (
-                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                    <FiAward className="text-white text-xl" />
-                  </div>
-                )}
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-black text-2xl">
-                    {results.p2.name?.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <h3 className="font-black text-2xl">{results.p2.name}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Fighter 2</p>
-                  </div>
-                </div>
-                <div className="text-center py-6">
-                  <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
-                    {results.p2.score}
-                  </div>
-                  <div className="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mt-2">points</div>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {features.map((feature) => (
+            <article
+              key={feature.title}
+              className="group rounded-[1.75rem] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:bg-white/8"
+            >
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/10 transition group-hover:bg-blue-500/20">
+                <span className="h-3 w-3 rounded-full bg-blue-400" />
+              </div>
+              <h4 className="text-xl font-bold text-white">{feature.title}</h4>
+              <p className="mt-3 leading-7 text-white/65">{feature.desc}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
-      {/* Features Section */}
-      <section className="container py-20 border-t border-gray-200/50 dark:border-gray-800/50">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-4xl md:text-5xl font-black text-center mb-4">
-            Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GitBattle</span>?
-          </h2>
-          <p className="text-center text-gray-600 dark:text-gray-400 mb-16 max-w-2xl mx-auto">
-            Advanced analytics and competitive features designed for developers
-          </p>
+      <section id="workflow" className="mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-10">
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
+          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">Workflow</p>
+            <h3 className="mt-3 text-3xl font-black tracking-tight text-white">Simple path from staff setup to payroll output.</h3>
+            <p className="mt-5 leading-7 text-white/65">
+              This structure keeps the app lean enough for free hosting while leaving space for stronger enterprise features later.
+            </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="group relative p-6 rounded-2xl glass border border-white/20 backdrop-blur-sm hover:border-brand-primary/50 transition-all cursor-pointer"
+            <div className="mt-8 flex flex-wrap gap-2">
+              {highlights.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-5">
+            {steps.map((item) => (
+              <div
+                key={item.step}
+                className="flex gap-5 rounded-[1.75rem] border border-white/10 bg-white/5 p-6"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/0 to-brand-primary/0 group-hover:from-brand-primary/10 group-hover:to-purple-600/10 rounded-2xl transition-all duration-300" />
-                <div className="relative">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-primary to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-brand-primary/30">
-                    <feature.icon className="text-white text-2xl" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">{feature.label}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{feature.value}</p>
+                <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/10 text-lg font-black text-white">
+                  {item.step}
                 </div>
-              </motion.div>
+                <div>
+                  <h4 className="text-xl font-bold text-white">{item.title}</h4>
+                  <p className="mt-2 leading-7 text-white/65">{item.desc}</p>
+                </div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="container py-20">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="relative overflow-hidden rounded-3xl p-12 md:p-20 text-center"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 opacity-90" />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20" />
-
-          <div className="relative z-10">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-4xl md:text-6xl font-black text-white mb-6"
-            >
-              Ready to Battle?
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-xl text-white/90 mb-8 max-w-2xl mx-auto"
-            >
-              Join thousands of developers comparing their GitHub profiles
-            </motion.p>
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="px-10 py-5 rounded-full bg-white text-purple-600 font-black text-lg uppercase shadow-2xl hover:shadow-white/50 transition-all"
-            >
-              Start Your Battle
-            </motion.button>
+      <section id="metrics" className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10">
+        <div className="grid gap-5 lg:grid-cols-3">
+          <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-blue-500/20 to-cyan-400/10 p-7">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/55">Speed</p>
+            <p className="mt-3 text-4xl font-black tracking-tight">Fast enough for daily use</p>
+            <p className="mt-4 leading-7 text-white/70">Keep data access tight, calculations lightweight, and requests short.</p>
           </div>
-        </motion.div>
+          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">Trust</p>
+            <p className="mt-3 text-4xl font-black tracking-tight">Secure by default</p>
+            <p className="mt-4 leading-7 text-white/65">Protected routes, hashed passwords, and role checks are non-negotiable.
+            </p>
+          </div>
+          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">Scale</p>
+            <p className="mt-3 text-4xl font-black tracking-tight">Ready for expansion</p>
+            <p className="mt-4 leading-7 text-white/65">The structure can grow into multi-branch, tax logic, approvals, and reporting later.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="get-started" className="mx-auto max-w-7xl px-6 pb-20 pt-6 sm:px-8 lg:px-10 lg:pb-28">
+        <div className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/6 p-8 sm:p-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.18),_transparent_30%),radial-gradient(circle_at_bottom_left,_rgba(168,85,247,0.16),_transparent_28%)]" />
+          <div className="relative grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">Get started</p>
+              <h3 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                Ship the MVP first. Add the heavy stuff later.
+              </h3>
+              <p className="mt-4 max-w-2xl leading-7 text-white/65">
+                This page is set up as a polished starting point for the payroll app. Replace the marketing shell with authenticated dashboard screens as development continues.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Link
+                href="/login"
+                className="rounded-full bg-white px-6 py-3 text-center text-sm font-semibold text-slate-950 transition hover:scale-[1.02]"
+              >
+                Go to login
+              </Link>
+              <Link
+                href="/dashboard"
+                className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+              >
+                Open dashboard
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

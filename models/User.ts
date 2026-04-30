@@ -1,21 +1,39 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
-const UserSchema = new Schema({
-  name: String,
-  email: { type: String, unique: true },
-  image: String,
-  emailVerified: Date,
-}, { timestamps: true });
+export type UserRole = "admin" | "hr" | "manager" | "employee";
 
-export const User = models.User || model('User', UserSchema);
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  employeeId?: string;
+  status: "active" | "inactive";
+}
 
-// models/BattleResult.ts
-const BattleResultSchema = new Schema({
-  winnerUsername: { type: String, required: true },
-  loserUsername: { type: String, required: true },
-  winnerScore: { type: Number, required: true },
-  loserScore: { type: Number, required: true },
-  playedBy: { type: Schema.Types.ObjectId, ref: 'User' }, 
-}, { timestamps: true });
+const UserSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ["admin", "hr", "manager", "employee"],
+      default: "employee",
+    },
+    employeeId: { type: String },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
+  },
+  { timestamps: true }
+);
 
-export const BattleResult = models.BattleResult || model('BattleResult', BattleResultSchema);
+export const User = models.User || model<IUser>("User", UserSchema);

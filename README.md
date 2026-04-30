@@ -238,4 +238,4 @@ This app is designed to fit free-tier hosting limits, but some trade-offs apply:
 ## Author
 
 Built by **Silas**.
-# psychic
+
