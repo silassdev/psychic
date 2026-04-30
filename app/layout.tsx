@@ -4,8 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/lib/auth";
 
-
-const session = await auth();
+import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,7 +48,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await (auth);
+  const session = await auth();
   const isAuthed = !!session?.user;
 
   return (
@@ -74,31 +73,24 @@ export default async function RootLayout({
               <a href="#get-started" className="transition hover:text-white">Get started</a>
             </nav>
 
-            <div className="flex items-center gap-3">
-              {isAuthed ? (
-                <Link
-                  href="/dashboard"
-                  className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-white/10 transition hover:scale-[1.02]"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <>
+              <div className="flex items-center gap-3">
+                {isAuthed ? (
                   <Link
-                    href="/login"
-                    className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/signup"
+                    href="/dashboard"
                     className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-white/10 transition hover:scale-[1.02]"
                   >
-                    Sign up
+                    Dashboard
                   </Link>
-                </>
-              )}
-            </div>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="group grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/5 text-white transition hover:bg-white/10"
+                    aria-label="Account"
+                  >
+                    <HiOutlineUserCircle className="text-2xl transition group-hover:scale-110" />
+                  </Link>
+                )}
+              </div>
           </div>
         </header>
 

@@ -1,168 +1,166 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FiGithub } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
-    const [loading, setLoading] = useState<string | null>(null);
+export default function AuthPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-    const handleSignIn = async (provider: "google" | "github") => {
-        setLoading(provider);
-        await signIn(provider, { callbackUrl: "/" });
-    };
+  const initialMode = searchParams.get("mode") === "signup" ? "signup" : "login";
+  const [mode, setMode] = useState<"login" | "signup">(initialMode);
 
-    return (
-        <main className="relative min-h-screen flex items-center justify-center overflow-hidden">
-            {/* Animated Background */}
-            <div className="absolute inset-0 -z-10">
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse"
-                    style={{ animationDuration: '4s' }} />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-emerald-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"
-                    style={{ animationDuration: '6s', animationDelay: '1s' }} />
+  const isLogin = mode === "login";
+
+  useEffect(() => {
+    const nextMode = searchParams.get("mode") === "signup" ? "signup" : "login";
+    setMode(nextMode);
+  }, [searchParams]);
+
+  const switchMode = (nextMode: "login" | "signup") => {
+    setMode(nextMode);
+    router.replace(`/login?mode=${nextMode}`);
+  };
+
+  const handleGoogle = async () => {
+    await signIn("google", { callbackUrl: "/dashboard" });
+  };
+
+  return (
+    <main className="min-h-screen bg-[#060A12] text-white">
+      <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-6 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/30 backdrop-blur-xl lg:grid-cols-[1.05fr_0.95fr]"
+        >
+          <div className="hidden flex-col justify-between border-r border-white/10 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.22),_transparent_50%)] p-10 lg:flex">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">
+                PayPilot
+              </p>
+              <h1 className="mt-4 max-w-md text-4xl font-black tracking-tight">
+                A polished access flow for payroll teams.
+              </h1>
+              <p className="mt-4 max-w-md leading-7 text-white/65">
+                Clean access, role-based entry, and a professional first impression.
+              </p>
             </div>
 
-            <div className="container py-20">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="max-w-md mx-auto"
+            <div className="grid gap-3 text-sm text-white/60">
+              <p>• Google sign-in for faster access</p>
+              <p>• Credentials login for internal users</p>
+              <p>• One page for login and account creation</p>
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8 lg:p-10">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/45">
+                  {isLogin ? "Welcome back" : "Create your account"}
+                </p>
+                <h2 className="mt-2 text-3xl font-black tracking-tight">
+                  {isLogin ? "Sign in" : "Sign up"}
+                </h2>
+              </div>
+
+              <div className="rounded-full border border-white/10 bg-white/5 p-1">
+                <button
+                  type="button"
+                  onClick={() => switchMode("login")}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                    isLogin ? "bg-white text-slate-950" : "text-white/70"
+                  }`}
                 >
-                    {/* Header */}
-                    <div className="text-center mb-8">
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full glass border border-white/20 backdrop-blur-sm"
-                        >
-                            <span className="text-xs font-bold uppercase tracking-wider">Secure Login</span>
-                        </motion.div>
-
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="text-4xl md:text-5xl font-black mb-4 tracking-tight"
-                        >
-                            Welcome to{" "}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
-                                GitBattle
-                            </span>
-                        </motion.h1>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className="text-gray-600 dark:text-gray-300"
-                        >
-                            Sign in to compare profiles and climb the leaderboard
-                        </motion.p>
-                    </div>
-
-                    {/* Sign-in Card */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="glass rounded-3xl p-8 border border-white/20 backdrop-blur-xl shadow-2xl"
-                    >
-                        <div className="space-y-4">
-                            {/* Google Sign-in */}
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => handleSignIn("google")}
-                                disabled={loading !== null}
-                                className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-all font-semibold shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading === "google" ? (
-                                    <motion.div
-                                        animate={{ rotate: 360 }}
-                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                        className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full"
-                                    />
-                                ) : (
-                                    <FcGoogle className="text-2xl" />
-                                )}
-                                <span className="text-gray-700 dark:text-gray-200">
-                                    {loading === "google" ? "Signing in..." : "Continue with Google"}
-                                </span>
-                            </motion.button>
-
-                            {/* Divider */}
-                            <div className="relative">
-                                <div className="absolute inset-0 flex items-center">
-                                    <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
-                                </div>
-                                <div className="relative flex justify-center text-sm">
-                                    <span className="px-4 bg-white/50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-medium">
-                                        OR
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* GitHub Sign-in */}
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => handleSignIn("github")}
-                                disabled={loading !== null}
-                                className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-gray-900 dark:bg-gray-800 border-2 border-gray-800 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-400 transition-all font-semibold shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading === "github" ? (
-                                    <motion.div
-                                        animate={{ rotate: 360 }}
-                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                        className="w-5 h-5 border-2 border-gray-600 border-t-white rounded-full"
-                                    />
-                                ) : (
-                                    <FiGithub className="text-2xl text-white" />
-                                )}
-                                <span className="text-white">
-                                    {loading === "github" ? "Signing in..." : "Continue with GitHub"}
-                                </span>
-                            </motion.button>
-                        </div>
-
-                        {/* Info Text */}
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.7 }}
-                            className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400"
-                        >
-                            By signing in, you agree to our{" "}
-                            <Link href="/terms" className="text-brand-primary hover:underline">
-                                Terms of Service
-                            </Link>{" "}
-                            and{" "}
-                            <Link href="/privacy" className="text-brand-primary hover:underline">
-                                Privacy Policy
-                            </Link>
-                        </motion.p>
-                    </motion.div>
-
-                    {/* Back to Home */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.8 }}
-                        className="mt-6 text-center"
-                    >
-                        <Link
-                            href="/"
-                            className="text-sm text-gray-600 dark:text-gray-400 hover:text-brand-primary transition-colors"
-                        >
-                            ← Back to Home
-                        </Link>
-                    </motion.div>
-                </motion.div>
+                  Login
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchMode("signup")}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                    !isLogin ? "bg-white text-slate-950" : "text-white/70"
+                  }`}
+                >
+                  Sign up
+                </button>
+              </div>
             </div>
-        </main>
-    );
+
+            <button
+              type="button"
+              onClick={handleGoogle}
+              className="mt-8 flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              <span className="grid h-5 w-5 place-items-center rounded-full bg-white text-xs font-black text-slate-950">
+                G
+              </span>
+              Continue with Google
+            </button>
+
+            <div className="my-6 flex items-center gap-3">
+              <div className="h-px flex-1 bg-white/10" />
+              <span className="text-xs uppercase tracking-[0.2em] text-white/35">
+                or
+              </span>
+              <div className="h-px flex-1 bg-white/10" />
+            </div>
+
+            <form className="space-y-4">
+              {!isLogin && (
+                <input
+                  type="text"
+                  placeholder="Full name"
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50"
+                />
+              )}
+
+              <input
+                type="email"
+                placeholder="Email address"
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50"
+              />
+
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-blue-400/50"
+              />
+
+              <button
+                type="submit"
+                className="w-full rounded-2xl bg-white px-4 py-3.5 text-sm font-semibold text-slate-950 transition hover:scale-[1.01]"
+              >
+                {isLogin ? "Sign in" : "Create account"}
+              </button>
+            </form>
+
+            <p className="mt-6 text-center text-sm text-white/55">
+              {isLogin ? "Need an account?" : "Already have an account?"}{" "}
+              <button
+                type="button"
+                onClick={() => switchMode(isLogin ? "signup" : "login")}
+                className="font-semibold text-white underline decoration-white/30 underline-offset-4"
+              >
+                {isLogin ? "Sign up" : "Sign in"}
+              </button>
+            </p>
+
+            <div className="mt-8 flex justify-center">
+              <Link
+                href="/"
+                className="text-sm text-white/50 transition hover:text-white"
+              >
+                Back to home
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </main>
+  );
 }

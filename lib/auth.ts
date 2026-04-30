@@ -1,35 +1,39 @@
+// auth.ts
 import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 import { User } from "@/models/User";
 
+type LoginCredentials = {
+  email?: string;
+  password?: string;
+};
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
+    Google,
     Credentials({
       name: "Credentials",
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
+        const { email, password } = credentials as LoginCredentials;
+
+        if (!email || !password) {
           throw new Error("Missing credentials");
         }
 
         await connectDB();
 
-        const user = await User.findOne({ email: credentials.email });
+        const user = await User.findOne({ email });
+        if (!user) throw new Error("User not found");
 
-        if (!user) {
-          throw new Error("User not found");
-        }
-
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-
-        if (!isValid) {
-          throw new Error("Invalid password");
-        }
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) throw new Error("Invalid password");
 
         return {
           id: user._id.toString(),
@@ -41,6 +45,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   session: { strategy: "jwt" },
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) token.role = (user as any).role;
@@ -48,13 +55,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).role = token.role;
+        (session.user as any).role = (token as any).role;
       }
       return session;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
 });
